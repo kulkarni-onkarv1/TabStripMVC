@@ -1,0 +1,41 @@
+﻿@model Member  
+<div class="container">  
+  
+<ul class="nav nav-tabs" role="tablist">  
+@{ 
+  
+<li class="nav-item">  
+<a class="nav-link active" data-toggle="tab" href="#login">Login</a>  
+</li>  
+ 
+<li class="nav-item">  
+<a class="nav-link" data-toggle="tab" href="#register">Register</a>  
+</li>      
+}    
+</ul>  
+<div class="tab-content">  
+
+					<div id="login" class="container tab-pane active">  	
+						<br>  						 
+						@{
+							Html.RenderPartial("_LoginPartial",Model.UserLogin);
+						}
+					</div>
+					<div id="login" class="tab-pane fade">  	
+						<br>  						 
+						@{
+							Html.RenderPartial("_LoginPartial",Model.UserLogin);
+						}
+					</div>
+					<div id="register" class="tab-pane fade">  	
+						<br>  						 
+						@{
+							Html.RenderPartial("_RegisterPartial",Model.RegisterUser);
+						}
+					</div>											
+</div>  
+  
+</div>  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>  
