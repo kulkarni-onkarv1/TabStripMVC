@@ -10,7 +10,8 @@
  
 <li class="nav-item">  
 <a class="nav-link" data-toggle="tab" href="#register">Register</a>  
-</li>      
+</li>  
+
 }    
 </ul>  
 <div class="tab-content">  
@@ -18,22 +19,26 @@
 					<div id="login" class="container tab-pane active">  	
 						<br>  						 
 						@{
+							<h6 style="color: red;">@ViewBag.Message</h6>
 							Html.RenderPartial("_LoginPartial",Model.UserLogin);
 						}
 					</div>
-					<div id="login" class="tab-pane fade">  	
+					@*<div id="login" class="tab-pane fade">  	
 						<br>  						 
 						@{
 							Html.RenderPartial("_LoginPartial",Model.UserLogin);
 						}
-					</div>
+					</div>*@
 					<div id="register" class="tab-pane fade">  	
 						<br>  						 
 						@{
 							Html.RenderPartial("_RegisterPartial",Model.RegisterUser);
 						}
 					</div>											
-</div>  
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
   
 </div>  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  

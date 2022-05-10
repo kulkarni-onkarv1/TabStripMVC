@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "o8AZCumC/4PUrt10usPFoYSbRwpfOmIBH2Tcr1Knnro=",
+  "Hash": "Oi+tm3JfCpsZqzbaxZUHI6HUeUyt7yVPlnvHydWHyUw=",
   "Source": "TabStripDemo",
   "BasePath": "_content/TabStripDemo",
   "Mode": "Default",
@@ -49,6 +49,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Coditas\\source\\repos\\TabStripDemo\\TabStripDemo\\wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.js",
+      "SourceId": "TabStripDemo",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Coditas\\source\\repos\\TabStripDemo\\TabStripDemo\\wwwroot\\",
+      "BasePath": "_content/TabStripDemo",
+      "RelativePath": "jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.js"
+    },
+    {
+      "Identity": "C:\\Users\\Coditas\\source\\repos\\TabStripDemo\\TabStripDemo\\wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.min.js",
+      "SourceId": "TabStripDemo",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Coditas\\source\\repos\\TabStripDemo\\TabStripDemo\\wwwroot\\",
+      "BasePath": "_content/TabStripDemo",
+      "RelativePath": "jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\jquery-ajax-unobtrusive\\jquery.unobtrusive-ajax.min.js"
     },
     {
       "Identity": "C:\\Users\\Coditas\\source\\repos\\TabStripDemo\\TabStripDemo\\wwwroot\\js\\site.js",

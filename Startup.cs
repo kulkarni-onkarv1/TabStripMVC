@@ -1,13 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TabStripDemo.Models;
+using TabStripDemo.Repositories;
 
 namespace TabStripDemo
 {
@@ -24,6 +28,26 @@ namespace TabStripDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+    });
+            services.AddDbContext<CollegeContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AppConfigString"));
+            }
+            );
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(session => {
+                session.IdleTimeout = TimeSpan.FromMinutes(20);
+            });
+
+            services.AddScoped<IRepository<User, string>, UserAuthenticationAccess>();
+            services.AddScoped<IRepository<CandidateAcademic, string>, CandidateDataAccess>();
+            services.AddScoped<CandidateAcademic>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +67,7 @@ namespace TabStripDemo
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 
@@ -50,7 +75,7 @@ namespace TabStripDemo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Authentication}/{action=Index}");
             });
         }
     }

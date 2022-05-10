@@ -1,0 +1,19 @@
+﻿@model Member
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ValidateMail">
+             @*<h4>@ViewBag.NewMessage</h4>
+            <h4>@ViewData["Message"]</h4>*@
+            <h6 style="color:orange;">Enter 6 Digit OTP Sent On Your Mail ID</h6>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OTP" class="control-label"></label>
+                <input asp-for="OTP" class="form-control" />
+                <span asp-validation-for="OTP" class="text-danger"></span>                
+            </div>           
+            <div class="form-group">
+                <input type="submit"  value="Validate" class="btn btn-primary" />              
+            </div>
+        </form>
+    </div>
+</div>

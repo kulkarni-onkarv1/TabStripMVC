@@ -1,25 +1,28 @@
 ﻿@model RegisterUser
-
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-controller="CandidateAcademics" asp-action="Create" method="get">
              @*<h4>@ViewBag.NewMessage</h4>
             <h4>@ViewData["Message"]</h4>*@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MailID" class="control-label"></label>
+               @* <label asp-for="MailID" class="control-label"></label>*@
+                <p style="color:rgb(0, 0, 128);">Enter your institute Mail ID. One Time Password will be sent to this Mail for verification</p>
                 <input asp-for="MailID" class="form-control" />
-                <span asp-validation-for="MailID" class="text-danger"></span>
+                <span asp-validation-for="MailID" style="color:red;"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                @*<label asp-for="Password" class="control-label"></label>*@
+                <p style="color:rgb(0, 0, 128);">Create Password</p>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" style="color:red;"></span>
             </div>
              <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                @*<label asp-for="ConfirmPassword" class="control-label"></label>*@
+                <p style="color:rgb(0, 0, 128);">Confirm Password</p>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" style="color:red;"></span>
             </div>
             <div class="form-group">
                 <input type="submit"  value="Next" class="btn btn-primary" />              
@@ -27,5 +30,11 @@
         </form>
     </div>
 </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
 
 
