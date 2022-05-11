@@ -1,4 +1,10 @@
 ﻿@model Member  
+
+<div class="Button_center">	
+    <h3 style="color:indigo;">Welcome!</h3>
+</div>
+
+
 <div class="container">  
   
 <ul class="nav nav-tabs" role="tablist">  
@@ -19,7 +25,7 @@
 					<div id="login" class="container tab-pane active">  	
 						<br>  						 
 						@{
-							<h6 style="color: red;">@ViewBag.Message</h6>
+							@*<h6 style="color: red;">@ViewBag.Message</h6>*@
 							Html.RenderPartial("_LoginPartial",Model.UserLogin);
 						}
 					</div>
@@ -43,4 +49,22 @@
 </div>  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>  
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<style>
+
+    .Button_center{
+        display:flex;
+        justify-content:center;
+    }
+</style>
+
+ @if (ViewBag.Message != null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () {  
+                alert("@ViewBag.Message");  
+            };  
+        </script> 
+	}

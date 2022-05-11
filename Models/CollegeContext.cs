@@ -43,7 +43,7 @@ namespace TabStripDemo.Models
 
                 entity.Property(e => e.Branch)
                     .IsRequired()
-                    .HasMaxLength(5)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CollegeName)

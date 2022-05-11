@@ -54,9 +54,24 @@ namespace TabStripDemo.Repositories
             //throw new System.NotImplementedException();
         }
 
+        Task<User> IRepository<User, string>.GetByUserIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         Task<User> IRepository<User, string>.UpdateAsync(User entity, string id)
         {
             throw new System.NotImplementedException();
+        }
+
+        public int? GetRoleByUserId(int UserID)
+        {
+            var UserRole = _collegeContext.UserRoles.Where(U => U.UserId == UserID).FirstOrDefault();
+			if (UserRole == null)
+			{
+                return null;
+			}
+            return UserRole.RoleId;
         }
     }
 }

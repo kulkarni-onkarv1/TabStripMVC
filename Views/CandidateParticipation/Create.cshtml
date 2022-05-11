@@ -1,0 +1,60 @@
+﻿@model TabStripDemo.Models.CandidateTransaction
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>CandidateTransaction</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                 <input asp-for="UserId" readonly class="form-control" />
+               @* <select asp-for="UserId" class ="form-control" asp-items=""></select>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="ReciepientBank" class="control-label"></label>
+                <input asp-for="ReciepientBank" class="form-control" />
+                <span asp-validation-for="ReciepientBank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionType" class="control-label"></label>
+                <input asp-for="TransactionType" class="form-control" />
+                <span asp-validation-for="TransactionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Utr" class="control-label"></label>
+                <input asp-for="Utr" class="form-control" />
+                <span asp-validation-for="Utr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+           @* <div class="form-group">
+                <label asp-for="TransactionRecieptPath" class="control-label"></label>
+                <input asp-for="TransactionRecieptPath" class="form-control" />
+                <span asp-validation-for="TransactionRecieptPath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApprovalStatus" class="control-label"></label>
+                <input asp-for="ApprovalStatus" class="form-control" />
+                <span asp-validation-for="ApprovalStatus" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

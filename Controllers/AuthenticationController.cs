@@ -15,14 +15,14 @@ namespace TabStripDemo.Controllers
         Member members = new Member();
         UserLogin UserLogin=new UserLogin();
         RegisterUser RegisterUser=new RegisterUser();
-        InstituteStudentsDataAccess instituteStudentsDataAccess;
+        public static bool IsAuthenticated { get; set; } = false;
         private readonly IRepository<User, string> userAccess;
 
         public AuthenticationController(IRepository<User,string> userAccess)
         {
             this.userAccess = userAccess;
-            instituteStudentsDataAccess = new InstituteStudentsDataAccess();
         }
+        
         public IActionResult Index(String ResponseMessage)
         {
             //List<Member> members = new List<Member>();
@@ -34,14 +34,16 @@ namespace TabStripDemo.Controllers
             return View("Index",members);
             //return View("_RegisterPartial", RegisterUser);
         }
-        public IActionResult Login()
+        /*[HttpPost]
+        public IActionResult PostRegistration()
         {
-            return View();
-        }
+            return RedirectToAction("Index");
+        }*/
         [HttpPost]
         public IActionResult Login(UserLogin userLogin)
         {
             var getUser = userAccess.GetByEmailAsync(userLogin.MailID).Result;
+            
             if ( getUser== null)
             {
                 var ErrorMessage = EncryptorDecryptor.EncryptAsync($"No User Exists With Entered Mail ID {userLogin.MailID}");
@@ -53,8 +55,17 @@ namespace TabStripDemo.Controllers
                 return RedirectToAction("Index", "Authentication", new { ResponseMessage = ErrorMessage });
             }
             //var decryptedPassword = EncryptorDecryptor.DecryptAsync(userLogin.Password);
-            
-            return RedirectToAction("Login");
+            // return LocalRedirect("/");
+            IsAuthenticated = true;       
+            var EncrUserId = EncryptorDecryptor.EncryptAsync($"{getUser.UserId.ToString()}");
+            return RedirectToAction("Index", "CandidateParticipation",new { EncrUserId = EncrUserId });
+        }
+        
+
+        public IActionResult Logout()
+        {
+            IsAuthenticated = false;
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

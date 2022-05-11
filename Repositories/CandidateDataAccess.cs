@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TabStripDemo.Models;
 
@@ -21,7 +22,7 @@ namespace TabStripDemo.Repositories
             }
             catch (System.Exception ex)
             {
-                throw;
+                return null;
             }
         }
 
@@ -40,9 +41,50 @@ namespace TabStripDemo.Repositories
             throw new System.NotImplementedException();
         }
 
+        Task<CandidateAcademic> IRepository<CandidateAcademic, string>.GetByUserIdAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
         Task<CandidateAcademic> IRepository<CandidateAcademic, string>.UpdateAsync(CandidateAcademic entity, string id)
         {
             throw new System.NotImplementedException();
         }
+    }
+
+    public class CandidateParticipation
+    {
+        CollegeContext collegeContext;
+        public CandidateParticipation()
+        {
+            collegeContext=new CollegeContext();
+        }
+
+        public List<CandidateTransaction> GetTransactions()
+		{
+            return collegeContext.CandidateTransactions.ToList();
+		}
+
+        public List<CandidateTransaction> GetByUserId(int userId)
+        {
+            try
+            {
+                var getPaymentDetails = collegeContext.CandidateTransactions.ToList().Where(M => M.UserId == userId).ToList();
+                return getPaymentDetails;
+            }
+            catch (System.Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<CandidateTransaction> CreatePaymentRequest(CandidateTransaction candidateTransaction)
+        {
+            var generatePaymentClaim=collegeContext.CandidateTransactions.Add(candidateTransaction);
+            await collegeContext.SaveChangesAsync();
+            return generatePaymentClaim.Entity;
+        }
+
     }
 }
