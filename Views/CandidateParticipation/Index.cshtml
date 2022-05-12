@@ -3,6 +3,23 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div class="text-right">
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div id="Menu1">
+                    <ul class="nav navbar-nav">
+                        <li><a class="selected" href="#">Home</a></li>
+                        <li>
+                            <a class="popout" href="#">Services</a><ul class="level2 dropdown-menu">
+                                <li><a class="" href="#">Consulting</a></li>
+                                <li><a class="" href="#">Outsourcing</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+</div>
 @if(Model.RoleID!=1)
 {
     <div class="Button_center">
@@ -16,16 +33,24 @@
         <a asp-action="Create" class="btn btn-success"  asp-controller="CandidateParticipation" asp-route-id="@Model.UserId">Create Payment Request</a> 
         <br /><br />
     </div>
-</div>
+</div>  
 }
-<div class="text-right">
+<div class="container">
+     <div id="navigationMenu" class="container">  	
+						<br>  						 
+						@{
+							Html.RenderPartial("_AdminNavigationBar");
+						}
+	</div>
+</div>
+@*<div class="text-right">
      <form asp-action="Logout" asp-controller="Authentication" method="get">            
             <div class="form-group">
                 <br />
                 <input type="submit" value="Logout" class="btn btn-warning" />
             </div>
-        </form>
-</div>
+        </form>       
+</div>*@
 @if (Model.candidateTransactions.Count() == 0)
 {
     if (Model.RoleID != 1)
