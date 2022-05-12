@@ -2,40 +2,34 @@
 
 @{
     ViewData["Title"] = "Index";
+   
 }
-<div class="text-right">
-     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <div id="Menu1">
-                    <ul class="nav navbar-nav">
-                        <li><a class="selected" href="#">Home</a></li>
-                        <li>
-                            <a class="popout" href="#">Services</a><ul class="level2 dropdown-menu">
-                                <li><a class="" href="#">Consulting</a></li>
-                                <li><a class="" href="#">Outsourcing</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-</div>
+
+
 @if(Model.RoleID!=1)
 {
     <div class="Button_center">
     <div class="col-md-4 ">
-       @* <form asp-action="Create" asp-controller="CandidateParticipation" asp-route-id="@Model.user.UserId" method="get">            
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-success" />
-            </div>
-        </form>*@
         <br />
         <a asp-action="Create" class="btn btn-success"  asp-controller="CandidateParticipation" asp-route-id="@Model.UserId">Create Payment Request</a> 
         <br /><br />
     </div>
 </div>  
 }
-<div class="container">
+@if (Model.RoleID != 1)
+{
+    <div class="container">
+     <div id="navigationMenu" class="container">  	
+						<br>  						 
+						@{
+							Html.RenderPartial("_CandidateNavigationBar",Model);
+						}
+	</div>
+</div>
+}
+else
+{
+    <div class="container">
      <div id="navigationMenu" class="container">  	
 						<br>  						 
 						@{
@@ -43,14 +37,8 @@
 						}
 	</div>
 </div>
-@*<div class="text-right">
-     <form asp-action="Logout" asp-controller="Authentication" method="get">            
-            <div class="form-group">
-                <br />
-                <input type="submit" value="Logout" class="btn btn-warning" />
-            </div>
-        </form>       
-</div>*@
+}
+
 @if (Model.candidateTransactions.Count() == 0)
 {
     if (Model.RoleID != 1)
@@ -80,11 +68,17 @@ else
             <th>
                Transaction Amount
             </th>
+            <th>
+               Transaction Date
+            </th>         
            @* <th>
                 @Html.DisplayNameFor(model => model.TransactionRecieptPath)
             </th>*@
             <th>
                Approval Status
+            </th>
+             <th>
+               Remark
             </th>
 @*            <th>
                 @Html.DisplayNameFor(model => model.User)
@@ -107,31 +101,40 @@ else
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
-
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionDate)
+            </td>
             @*<td>                   
                 @Html.DisplayFor(modelItem => item.TransactionRecieptPath)
             </td>*@
             <td>
-                @if (item.ApprovalStatus == 0)
+                @{
+                    if (item.ApprovalStatus == 0)
                     {
                         @*<button type="submit" id="approve_button" class="btn btn-danger">Pending
                     </button>*@
-                    <p class="button1">Pending</p>
+                    <p class="button3">Pending</p>
                     }
-                    else{
-                        <button type="submit" id="approve_button" class="btn btn-success">Approved
-                      </button>
+                    else if(item.ApprovalStatus==1)
+                    {
+                      <p class="button2">Approved</p>
                     }
+                    else
+                     {
+                       <p class="button1">Rejected</p>         
+                     }
+                }             
                @* @Html.DisplayFor(modelItem => item.ApprovalStatus)*@
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.MailId)
+                @Html.DisplayFor(modelItem=>item.ApproverRemark);
             </td>
-           @* <td>
-                <a asp-action="Edit" asp-route-id="@item.Urn">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Urn">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Urn">Delete</a>
-            </td>*@
+                    @if (Model.RoleID == 1 && item.ApprovalStatus==0)
+                    {
+                        <td>
+                            <a asp-action="Resolve" class="btn btn-warning"  asp-controller="CandidateParticipation" asp-route-Urn="@item.Urn">Resolve</a> 
+                       </td> 
+                    }
         </tr>
 }
     </tbody>
@@ -155,6 +158,29 @@ else
   display: inline-block;
   font-size: 16px;
 }
+
+  .button2 {
+  background-color: green; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.button3 {
+  background-color: #A94064; /* dark, dusky purplish pink */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 
 .styled-table {
     border-collapse: collapse;

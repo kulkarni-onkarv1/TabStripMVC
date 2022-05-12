@@ -1,0 +1,75 @@
+﻿@model TabStripDemo.Models.CandidateTransaction
+
+@{
+    ViewData["Title"] = "Resolve";
+}
+
+<h4 style="color:indigo;">Preview the transaction and then resolve it</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Resolve">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+               @*<h5 style="color:indigo;">User</h5>*@
+                <input asp-for="Urn" type="hidden" class ="form-control"></input>
+            </div>
+            <div class="form-group">
+               <h5 style="color:indigo;">User</h5>
+                <input asp-for="UserId" readonly class ="form-control"></input>
+            </div>
+            <div class="form-group">
+                <h5 style="color:indigo;">Reciepient's Bank</h5>  
+                <input asp-for="ReciepientBank" readonly class="form-control" />
+                <span asp-validation-for="ReciepientBank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h5 style="color:indigo;">Transaction Type</h5>  
+                <input asp-for="TransactionType" readonly class="form-control" />
+                <span asp-validation-for="TransactionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h5 style="color:indigo;">Unique Transaction Reference</h5> 
+                <input asp-for="Utr" readonly class="form-control" />
+                <span asp-validation-for="Utr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                 <h5 style="color:indigo;">Transaction Date</h5>
+                <input asp-for="TransactionDate" readonly class="form-control" />
+                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h5 style="color:indigo;">Request Date</h5>
+                <input asp-for="RequestDateTime" readonly class="form-control" />
+                <span asp-validation-for="RequestDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               <h5 style="color:indigo;">Amount</h5>  
+                <input asp-for="Amount" readonly class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+           @* <div class="form-group">
+                <label asp-for="TransactionRecieptPath" class="control-label"></label>
+                <input asp-for="TransactionRecieptPath" class="form-control" />
+                <span asp-validation-for="TransactionRecieptPath" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+               <h5 style="color:indigo;">Choose:</h5>                
+               <select asp-for="ApprovalStatus" class ="form-control" asp-items="ViewBag.ResolveStatus"></select>
+            </div>
+            <div class="form-group">
+                <h5 style="color:indigo;">Mention Remark</h5>  
+                 <input asp-for="ApproverRemark" class="form-control" />
+                <span asp-validation-for="ApproverRemark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Resolve" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

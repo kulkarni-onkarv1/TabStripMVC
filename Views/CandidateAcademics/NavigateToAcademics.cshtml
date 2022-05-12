@@ -15,17 +15,31 @@
                 <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
             </div>*@
             <div class="form-group">
-                <label asp-for="CollegeName" class="control-label"></label>
+                <h5 style="color:indigo;">Enter your first name</h5>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               <h5 style="color:indigo;">Enter your last name</h5>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               <h5 style="color:indigo;">Enter your most preferable language for coding</h5>
+               <select asp-for="Pglanganguage" class ="form-control" asp-items="ViewBag.PreferedLanguageList"></select>
+            </div>
+            <div class="form-group">
+                <h5 style="color:indigo;">Enter your college name</h5>
                 <input asp-for="CollegeName" class="form-control" />
                 <span asp-validation-for="CollegeName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Degree" class="control-label"></label>
+                <h5 style="color:indigo;">Select your persuing degree</h5>
                  <select asp-for="Degree" class ="form-control" asp-items="ViewBag.Degree"></select>
                 <span asp-validation-for="Degree" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Branch" class="control-label"></label>
+                 <h5 style="color:indigo;">Select your branch</h5>
                 <select asp-for="Branch" class ="form-control" asp-items="ViewBag.Field"></select>
                 <span asp-validation-for="Branch" class="text-danger"></span>
             </div>

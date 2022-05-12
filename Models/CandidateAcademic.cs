@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace TabStripDemo.Models
 {
@@ -8,12 +7,12 @@ namespace TabStripDemo.Models
     {
         public int Urn { get; set; }
         public int? UserId { get; set; }
-        [Required(ErrorMessage ="Mandatory")]
         public string CollegeName { get; set; }
-        [Required(ErrorMessage = "Mandatory")]
         public string Degree { get; set; }
-        [Required(ErrorMessage = "Mandatory")]
         public string Branch { get; set; }
+        public string Pglanganguage { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public virtual User User { get; set; }
     }

@@ -56,6 +56,19 @@ namespace TabStripDemo.Models
                     .HasMaxLength(15)
                     .IsUnicode(false);
 
+                entity.Property(e => e.FirstName)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pglanganguage)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("PGLanganguage");
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.User)
@@ -73,10 +86,22 @@ namespace TabStripDemo.Models
 
                 entity.Property(e => e.Urn).HasColumnName("URN");
 
+                entity.Property(e => e.ApproverRemark)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ReciepientBank)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.RequestDateTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ResponseDateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.TransactionDate).HasColumnType("date");
 
                 entity.Property(e => e.TransactionRecieptPath)
                     .HasMaxLength(400)

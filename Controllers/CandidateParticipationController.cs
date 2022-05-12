@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using TabStripDemo.Models;
 using TabStripDemo.Repositories;
 
@@ -11,11 +14,21 @@ namespace TabStripDemo.Controllers
         CandidateParticipation candidateParticipation;
         UserAuthenticationAccess userAuthenticationAccess;
         List<CandidateTransaction> getcandidateTransactions;
+        List<Status> status;
+        List<String> TransactionTypes;
 
         public CandidateParticipationController()
         {
             candidateParticipation= new CandidateParticipation();
             userAuthenticationAccess= new UserAuthenticationAccess();
+            status = new List<Status>() { 
+                new Status(){Code=1,StatusText="Approve"},
+                new Status(){Code=2,StatusText="Reject" }
+            };
+            TransactionTypes = new List<string>()
+            {
+                "IMPS","NEFT","UPI","Third Party Within Bank/FT"
+            };
         }
         public IActionResult Index(string EncrUserId)
         {
@@ -40,10 +53,7 @@ namespace TabStripDemo.Controllers
                 RoleID = RoleID
 
             };
-            /*candidateDetails.user=new User()
-            {
-                UserId= int.Parse(DecrUserId),
-            };*/
+            
             return View(candidateDetails);
         }
 
@@ -51,7 +61,7 @@ namespace TabStripDemo.Controllers
         {
             CandidateTransaction transaction = new CandidateTransaction();
             transaction.UserId=int.Parse(EncryptorDecryptor.DecryptAsync(id));
-            //
+            ViewBag.TransactionTypes = new SelectList(TransactionTypes, "TransactionTypes");
             return View(transaction);
         }
         [HttpPost]
@@ -59,6 +69,21 @@ namespace TabStripDemo.Controllers
         {
             var generatePaymentClaim = candidateParticipation.CreatePaymentRequest(transaction);
             return RedirectToAction("Index",new { EncrUserId = EncryptorDecryptor.EncryptAsync(transaction.UserId.ToString()) });
+        }
+
+        public IActionResult Resolve(int Urn)
+        {
+            var getCandidateTransaction= candidateParticipation.GetTransactions().Where(U=>U.Urn==Urn).FirstOrDefault();
+            ViewBag.ResolveStatus= new SelectList(status, "Code", "StatusText");
+            return View(getCandidateTransaction);
+        }
+
+        [HttpPost]
+        public IActionResult Resolve(CandidateTransaction transaction)
+        {
+            var resolvingTransaction=candidateParticipation.ResolveTransaction(transaction);
+            var EncrUserId = EncryptorDecryptor.EncryptAsync(AuthenticationController.AdminUserID.ToString());
+            return RedirectToAction("Index", new { EncrUserId = EncrUserId });
         }
     }
 }

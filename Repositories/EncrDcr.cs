@@ -37,6 +37,10 @@ namespace TabStripDemo.Repositories
 
         public static string DecryptAsync(string text)
         {
+            if(text == null)
+            {
+                return null;
+            }
             try
             {
                 var textToDecrypt = text;

@@ -1,15 +1,11 @@
-﻿@using TabStripDemo.Controllers
-@using TabStripDemo.Repositories
+﻿@model TabStripDemo.Models.CandidateDetails
 
-@{
-	var UserID=EncryptorDecryptor.EncryptAsync(AuthenticationController.AdminUserID.ToString());
-}
+
 <div id="mySidenav" class="sidenav">
-  <a asp-action="Index" asp-controller="CandidateParticipation" asp-route-EncrUserId="@UserID" id="about">Home</a>
-  <a href="#" id="blog">Profile</a>
-  <a asp-action="ResolvedTransactions" asp-controller="RequestStatus" asp-route-status=1 id="projects">Approvals</a>
-  <a asp-action="ResolvedTransactions" asp-controller="RequestStatus" asp-route-status=2 id="contact">Rejections</a>
-  <a asp-action="Logout" asp-controller="Authentication" method="get" id="Logout">Logout</a>
+  <a href="#" id="about">Profile</a>
+  <a href="#" id="blog">Events</a>
+  <a id="projects">Result</a>
+  <a asp-action="Logout" asp-controller="Authentication" method="get" id="contact">Logout</a>
 </div>
 
 <style>
@@ -49,9 +45,5 @@
 #contact {
   top: 200px;
   background-color: #555 /* Light Black */
-}
-#Logout{
-  top: 260px;
-  background-color: pink /* Light Black */
 }
 </style>

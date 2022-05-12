@@ -1,39 +1,44 @@
-﻿@model TabStripDemo.Models.CandidateTransaction
+﻿@using TabStripDemo.Repositories
+@model TabStripDemo.Models.CandidateTransaction
 
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Create</h1>
-
-<h4>CandidateTransaction</h4>
+@{
+	var UserID=EncryptorDecryptor.EncryptAsync(@Model.UserId.ToString());
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                 <input asp-for="UserId" readonly class="form-control" />
+                @*<label asp-for="UserId" class="control-label"></label>*@
+                 <input asp-for="UserId" type="hidden" class="form-control" />
                @* <select asp-for="UserId" class ="form-control" asp-items=""></select>*@
             </div>
             <div class="form-group">
-                <label asp-for="ReciepientBank" class="control-label"></label>
+                 <h5 style="color:indigo;">Enter your bank name</h5>
                 <input asp-for="ReciepientBank" class="form-control" />
                 <span asp-validation-for="ReciepientBank" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TransactionType" class="control-label"></label>
-                <input asp-for="TransactionType" class="form-control" />
+                <h5 style="color:indigo;">Choose transaction type</h5>
+                 <select asp-for="TransactionType" class ="form-control" asp-items="@ViewBag.TransactionTypes"></select>
                 <span asp-validation-for="TransactionType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Utr" class="control-label"></label>
+                 <h5 style="color:indigo;">Enter Unique Reference Number of your transaction</h5>
                 <input asp-for="Utr" class="form-control" />
                 <span asp-validation-for="Utr" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
+                 <h5 style="color:indigo;">Choose transaction date</h5>
+                <input asp-for="TransactionDate" class="form-control" />
+                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                 <h5 style="color:indigo;">Enter the transaction amount</h5>
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
@@ -48,13 +53,13 @@
                 <span asp-validation-for="ApprovalStatus" class="text-danger"></span>
             </div>*@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-warning" asp-controller="CandidateParticipation" asp-route-EncrUserId="@UserID">Back to List</a>
 </div>
 

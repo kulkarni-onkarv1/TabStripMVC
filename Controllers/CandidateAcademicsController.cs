@@ -14,6 +14,7 @@ namespace TabStripDemo.Controllers
     {
         List<String> DegreeList;
         List<String> FieldList;
+        List<string> PreferedLanguageList;
         Member members=new Member();
         private readonly IRepository<CandidateAcademic, string> candidateAcademicsAccess;
         private readonly CandidateAcademic candidateAcademics;
@@ -32,6 +33,10 @@ namespace TabStripDemo.Controllers
             {
                 "Computer Science and Engineering","Information Technology","Electrical Engineering","Mechanical Engineering","Electronics and Telecommunication","Electronics","Mechatronics"
             };
+            PreferedLanguageList = new List<String>()
+            {
+                "Kotlin","C","C++","C Sharp","Perl","Java"
+            };
         }
 
         [HttpPost]
@@ -40,6 +45,7 @@ namespace TabStripDemo.Controllers
             HttpContext.Session.SetSessionData<RegisterUser>("UserCredentials", registerUser);
             ViewBag.Degree = new SelectList(DegreeList, "Degree");
             ViewBag.Field = new SelectList(FieldList,"Field");
+            ViewBag.PreferedLanguageList = new SelectList(PreferedLanguageList, "PreferedLanguageList");
             return View(candidateAcademics);
         }
         

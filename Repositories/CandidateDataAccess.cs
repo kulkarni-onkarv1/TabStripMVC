@@ -86,5 +86,25 @@ namespace TabStripDemo.Repositories
             return generatePaymentClaim.Entity;
         }
 
+        public async Task<CandidateTransaction> ResolveTransaction(CandidateTransaction transaction)
+        {
+            var findTransaction = collegeContext.CandidateTransactions.Find(transaction.Urn);
+            if (findTransaction != null)
+            {
+                findTransaction.Urn= transaction.Urn;
+                findTransaction.UserId= transaction.UserId;
+                findTransaction.TransactionType= transaction.TransactionType;
+                findTransaction.ReciepientBank= transaction.ReciepientBank;
+                findTransaction.Amount= transaction.Amount;
+                findTransaction.Utr= transaction.Utr;
+                findTransaction.TransactionRecieptPath=transaction.TransactionRecieptPath;
+                findTransaction.ApprovalStatus=transaction.ApprovalStatus;
+                findTransaction.ApproverRemark=transaction.ApproverRemark;
+                findTransaction.ResponseDateTime = System.DateTime.Now;
+            }          
+            collegeContext.SaveChangesAsync();
+            return findTransaction;
+        }
+
     }
 }

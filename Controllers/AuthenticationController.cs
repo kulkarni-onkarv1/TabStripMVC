@@ -15,6 +15,7 @@ namespace TabStripDemo.Controllers
         Member members = new Member();
         UserLogin UserLogin=new UserLogin();
         RegisterUser RegisterUser=new RegisterUser();
+        public static int AdminUserID=10013;
         public static bool IsAuthenticated { get; set; } = false;
         private readonly IRepository<User, string> userAccess;
 
