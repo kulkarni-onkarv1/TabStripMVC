@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" asp-controller="CandidateAcademics" method="post">
+        <form asp-action="RegisterCandidate" asp-controller="CandidateAcademics" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*<div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
@@ -26,7 +26,7 @@
             </div>
             <div class="form-group">
                <h5 style="color:indigo;">Enter your most preferable language for coding</h5>
-               <select asp-for="Pglanganguage" class ="form-control" asp-items="ViewBag.PreferedLanguageList"></select>
+               <select asp-for="Pglanganguage" class ="form-control" asp-items="@ViewBag.PreferedLanguageList"></select>
             </div>
             <div class="form-group">
                 <h5 style="color:indigo;">Enter your college name</h5>
@@ -44,8 +44,9 @@
                 <span asp-validation-for="Branch" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Confirm and Next" class="btn btn-primary" />
             </div>
+            
         </form>
     </div>
 </div>
@@ -57,4 +58,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+@if (TempData["InvalidAcademicsEntryErrorMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["InvalidEntryErrorMessage"]");  
+            };  
+        </script> 
+	}
+
 

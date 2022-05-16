@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="GetTransactionRequest">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 @*<label asp-for="UserId" class="control-label"></label>*@
@@ -25,6 +25,7 @@
             <div class="form-group">
                 <h5 style="color:indigo;">Choose transaction type</h5>
                  <select asp-for="TransactionType" class ="form-control" asp-items="@ViewBag.TransactionTypes"></select>
+                 @*@Html.DropDownListFor(model => model.TransactionType, new SelectList(new List<string>(){"IMPS","NEFT","UPI","FT"}), "Choose... ")*@
                 <span asp-validation-for="TransactionType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -62,4 +63,23 @@
 <div>
     <a asp-action="Index" class="btn btn-warning" asp-controller="CandidateParticipation" asp-route-EncrUserId="@UserID">Back to List</a>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@if (TempData["InvalidTransactionEntryErrorMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["InvalidTransactionEntryErrorMessage"]");  
+            };  
+        </script> 
+	}
+
+
+
+
+
 

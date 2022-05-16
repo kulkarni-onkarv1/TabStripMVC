@@ -31,6 +31,9 @@
     <thead>
         <tr>
             <th>
+               User ID
+            </th>
+            <th>
                Reciepant's Bank'
             </th>
             <th>
@@ -61,6 +64,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItm=>item.UserId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReciepientBank)
             </td>

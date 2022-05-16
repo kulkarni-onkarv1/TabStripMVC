@@ -1,46 +1,31 @@
-﻿<div id="mySidenav" class="sidenav">
-  <a href="#" id="about">Profile</a>
-  <a href="#" id="blog">Approvals</a>
-  <a href="#" id="projects">Rejections</a>
-  <a href="#" id="contact">Event</a>
+﻿@model Member
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ValidateMail">
+            @*<h4>@ViewData["Message"]</h4>*@
+            <h5 style="color:indigo;">Enter One Time Password   Sent On Your Mail ID</h5>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OTP" class="control-label"></label>
+                <input asp-for="OTP" class="form-control" />
+                <span asp-validation-for="OTP" class="text-danger"></span>                
+            </div>           
+            <div class="form-group">
+                <input type="submit"  value="Validate" class="btn btn-primary" />              
+            </div>
+        </form>
+    </div>
 </div>
 
 <style>
-	/* Style the links inside the sidenav */
-#mySidenav a {
-  position: absolute; /* Position them relative to the browser window */
-  right: -80px; /* Position them outside of the screen */
-  transition: 0.9s; /* Add transition on hover */
-  padding: 15px; /* 15px padding */
-  width: 200px; /* Set a specific width */
-  text-decoration: none; /* Remove underline */
-  font-size: 20px; /* Increase font size */
-  color: white; /* White text color */
-  border-radius: 0 5px 5px 0; /* Rounded corners on the top right and bottom right side */
-}
-
-#mySidenav a:hover {
-  right: 0; /* On mouse-over, make the elements appear as they should */
-}
-
-/* The about link: 20px from the top with a green background */
-#about {
-  top: 20px;
-  background-color: indigo;
-}
-
-#blog {
-  top: 80px;
-  background-color: #2196F3; /* Blue */
-}
-
-#projects {
-  top: 140px;
-  background-color: #f44336; /* Red */
-}
-
-#contact {
-  top: 200px;
-  background-color: #555 /* Light Black */
-}
+    .center_page{
+        width: 100%;
+ margin-left: auto;
+ margin-right: auto;
+ display: inline-block;
+    }
 </style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

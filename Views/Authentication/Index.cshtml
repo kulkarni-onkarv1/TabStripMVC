@@ -1,13 +1,13 @@
 ﻿@model Member  
 
 <div class="Button_center">	
-    <h3 style="color:indigo;">Welcome!</h3>
+    <h4 style="color:indigo;">Welcome!</h4>
 </div>
 
-
+@*<h4 style="text-align:left;color:tomato;">@TempData["ErrorMessage"]</h4>*@
 <div class="container">  
   
-<ul class="nav nav-tabs" role="tablist">  
+<ul class="nav nav-tabs">  
 @{ 
   
 <li class="nav-item">  
@@ -26,19 +26,13 @@
 						<br>  						 
 						@{
 							@*<h6 style="color: red;">@ViewBag.Message</h6>*@
-							Html.RenderPartial("_LoginPartial",Model.UserLogin);
+							await Html.RenderPartialAsync("_LoginPartial",Model.UserLogin);
 						}
 					</div>
-					@*<div id="login" class="tab-pane fade">  	
+					<div id="register" class="container tab-pane fade">  	
 						<br>  						 
 						@{
-							Html.RenderPartial("_LoginPartial",Model.UserLogin);
-						}
-					</div>*@
-					<div id="register" class="tab-pane fade">  	
-						<br>  						 
-						@{
-							Html.RenderPartial("_RegisterPartial",Model.RegisterUser);
+							await Html.RenderPartialAsync("_RegisterPartial",Model.RegisterUser);
 						}
 					</div>											
 </div>
@@ -60,11 +54,33 @@
     }
 </style>
 
- @if (ViewBag.Message != null)  
+ @if (TempData["InvalidLoginCredentialsErrorMessage"] != null)  
     {  
         <script type="text/javascript">  
             window.onload = function () {  
-                alert("@ViewBag.Message");  
+                alert("@TempData["InvalidLoginCredentialsErrorMessage"]");  
             };  
         </script> 
 	}
+
+@if (TempData["InvalidCredentialsEntryErrorMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["InvalidCredentialsEntryErrorMessage"]");  
+            };  
+        </script> 
+	}
+
+@if (TempData["RegisterResponseMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["RegisterResponseMessage"]");  
+            };  
+        </script> 
+	}
+
+	

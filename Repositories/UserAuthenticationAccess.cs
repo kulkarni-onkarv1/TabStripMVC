@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace TabStripDemo.Repositories
     public class UserAuthenticationAccess : IRepository<User, string>
     {
         CollegeContext _collegeContext;
-       public UserAuthenticationAccess()
+        public UserAuthenticationAccess()
         {
             _collegeContext=new CollegeContext();
         }
@@ -35,28 +36,38 @@ namespace TabStripDemo.Repositories
             throw new System.NotImplementedException();
         }
 
-        Task<List<User>> IRepository<User, string>.GetAsync()
+        async Task<List<User>> IRepository<User, string>.GetAsync()
         {
-            throw new System.NotImplementedException();
+            var GetUser=await _collegeContext.Users.ToListAsync();
+            return GetUser;
         }
 
         async Task<User> IRepository<User, string>.GetByEmailAsync(string MailID)
         {
-            var user = _collegeContext.Users.ToList().Where(M=>M.MailId==MailID).FirstOrDefault();
-            if (user==null)
+            try
             {
+                var GetUser = await _collegeContext.Users.ToListAsync();
+                var user = GetUser.Where(M => M.MailId == MailID).FirstOrDefault();
+                if (user == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+
                 return null;
             }
-            else
-            {
-                return user;
-            }
-            //throw new System.NotImplementedException();
         }
 
-        Task<User> IRepository<User, string>.GetByUserIdAsync(int id)
+        async Task<User> IRepository<User, string>.GetByUserIdAsync(int? id)
         {
-            throw new NotImplementedException();
+            var GetUser = await _collegeContext.Users.FindAsync(id);
+            return GetUser;
         }
 
         Task<User> IRepository<User, string>.UpdateAsync(User entity, string id)

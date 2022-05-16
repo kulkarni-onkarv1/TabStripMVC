@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TabStripDemo.Models;
@@ -8,12 +9,14 @@ namespace TabStripDemo.Repositories
     public class CandidateDataAccess : IRepository<CandidateAcademic, string>
     {
         CollegeContext collegeContext;
+        
         public CandidateDataAccess()
         {
             collegeContext = new CollegeContext();
         }
         async Task<CandidateAcademic> IRepository<CandidateAcademic, string>.CreateAsync(CandidateAcademic entity)
         {
+            //return null;
             try
             {
                 var insertCandidateAcademics = await collegeContext.CandidateAcademics.AddAsync(entity);
@@ -41,7 +44,7 @@ namespace TabStripDemo.Repositories
             throw new System.NotImplementedException();
         }
 
-        Task<CandidateAcademic> IRepository<CandidateAcademic, string>.GetByUserIdAsync(int id)
+        Task<CandidateAcademic> IRepository<CandidateAcademic, string>.GetByUserIdAsync(int? id)
         {
             throw new System.NotImplementedException();
         }
@@ -55,6 +58,8 @@ namespace TabStripDemo.Repositories
     public class CandidateParticipation
     {
         CollegeContext collegeContext;
+        public delegate void StatusEventHandler(object source, EventArgs e, String MailID);
+        public event StatusEventHandler? StatusEvent;
         public CandidateParticipation()
         {
             collegeContext=new CollegeContext();
@@ -75,18 +80,27 @@ namespace TabStripDemo.Repositories
             catch (System.Exception ex)
             {
 
-                throw;
+                return null;
             }
         }
 
         public async Task<CandidateTransaction> CreatePaymentRequest(CandidateTransaction candidateTransaction)
         {
-            var generatePaymentClaim=collegeContext.CandidateTransactions.Add(candidateTransaction);
-            await collegeContext.SaveChangesAsync();
-            return generatePaymentClaim.Entity;
+            //return null;
+            try
+            {
+                var generatePaymentClaim = collegeContext.CandidateTransactions.Add(candidateTransaction);
+                await collegeContext.SaveChangesAsync();
+                return generatePaymentClaim.Entity;
+            }
+            catch (System.Exception ex)
+            {
+
+                return null;
+            }
         }
 
-        public async Task<CandidateTransaction> ResolveTransaction(CandidateTransaction transaction)
+        public async Task<CandidateTransaction> ResolveTransaction(CandidateTransaction transaction,String MailID)
         {
             var findTransaction = collegeContext.CandidateTransactions.Find(transaction.Urn);
             if (findTransaction != null)
@@ -102,7 +116,15 @@ namespace TabStripDemo.Repositories
                 findTransaction.ApproverRemark=transaction.ApproverRemark;
                 findTransaction.ResponseDateTime = System.DateTime.Now;
             }          
-            collegeContext.SaveChangesAsync();
+            var statusChange=collegeContext.SaveChangesAsync().Result;
+            if (statusChange==1)
+            {
+                if (StatusEvent != null)
+                {
+                    StatusEvent(this, EventArgs.Empty, MailID);
+                }
+                // Mail?.Invoke(this, EventArgs.Empty, MailID);
+            }
             return findTransaction;
         }
 

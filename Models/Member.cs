@@ -8,7 +8,7 @@ namespace TabStripDemo.Models
         public UserLogin UserLogin { get; set; }
         public RegisterUser RegisterUser { get; set; }
         [Required]
-        //[Remote(action: "IsValidOTP", controller: "Authentication", HttpMethod = "POST")]
-        public string OTP { get; set; }
+        [Remote(action: "IsSixDigitNumber", controller: "CandidateAcademics", HttpMethod = "POST")]
+        public int? OTP { get; set; }
     }
 }

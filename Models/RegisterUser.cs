@@ -5,7 +5,7 @@ namespace TabStripDemo.Models
 {
     public class RegisterUser
     {
-        [Required(ErrorMessage = "Mail Id is mandatory field")]
+        [Required(ErrorMessage = "Mail Id is mandatory")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [Remote(action:"IsUserNameAvailable", controller:"Authentication",HttpMethod ="POST")]
         public string MailID { get; set; }

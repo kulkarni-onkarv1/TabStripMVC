@@ -7,7 +7,7 @@ namespace TabStripDemo.Repositories
     {
         Task<List<TEntity>> GetAsync();
         Task<TEntity> GetByEmailAsync(TPk id);
-        Task<TEntity> GetByUserIdAsync(int id);
+        Task<TEntity> GetByUserIdAsync(int? id);
         Task<TEntity> CreateAsync(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity, TPk id);
         Task<TEntity> DeleteAsync(TPk id);

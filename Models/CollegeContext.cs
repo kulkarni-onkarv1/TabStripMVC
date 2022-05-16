@@ -109,7 +109,7 @@ namespace TabStripDemo.Models
 
                 entity.Property(e => e.TransactionType)
                     .IsRequired()
-                    .HasMaxLength(15)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");

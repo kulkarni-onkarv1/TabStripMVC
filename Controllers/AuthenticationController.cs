@@ -24,36 +24,29 @@ namespace TabStripDemo.Controllers
             this.userAccess = userAccess;
         }
         
-        public IActionResult Index(String ResponseMessage)
-        {
-            //List<Member> members = new List<Member>();
-            //ViewBag.Message = HttpContext.Session.GetString("InvalidCredentials");
-            if (ResponseMessage != null)
-            {
-                ViewBag.Message = EncryptorDecryptor.DecryptAsync(ResponseMessage);
-            }         
+        public IActionResult Index()
+        {       
             return View("Index",members);
-            //return View("_RegisterPartial", RegisterUser);
         }
-        /*[HttpPost]
-        public IActionResult PostRegistration()
-        {
-            return RedirectToAction("Index");
-        }*/
         [HttpPost]
         public IActionResult Login(UserLogin userLogin)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["InvalidLoginCredentialsErrorMessage"] = $"Oh!Oh!Invalid Credentials!";
+                return RedirectToAction("Index", "Authentication");
+            }
             var getUser = userAccess.GetByEmailAsync(userLogin.MailID).Result;
             
             if ( getUser== null)
             {
-                var ErrorMessage = EncryptorDecryptor.EncryptAsync($"No User Exists With Entered Mail ID {userLogin.MailID}");
-                return RedirectToAction("Index", "Authentication", new { ResponseMessage =  ErrorMessage});
+                TempData["InvalidLoginCredentialsErrorMessage"] = $"No User Exists With Entered Mail ID {userLogin.MailID}";               
+                return RedirectToAction("Index", "Authentication");
             }
             else if(userLogin.Password!= EncryptorDecryptor.DecryptAsync(getUser.Password))
             {
-                var ErrorMessage = EncryptorDecryptor.EncryptAsync("Oh Oh! Invalid Password");
-                return RedirectToAction("Index", "Authentication", new { ResponseMessage = ErrorMessage });
+                TempData["InvalidLoginCredentialsErrorMessage"] = $"Oh!Oh!Invalid Password!";
+                return RedirectToAction("Index", "Authentication");
             }
             //var decryptedPassword = EncryptorDecryptor.DecryptAsync(userLogin.Password);
             // return LocalRedirect("/");

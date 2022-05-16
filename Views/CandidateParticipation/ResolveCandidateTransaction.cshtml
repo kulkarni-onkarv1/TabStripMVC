@@ -4,11 +4,13 @@
     ViewData["Title"] = "Resolve";
 }
 
-<h4 style="color:indigo;">Preview the transaction and then resolve it</h4>
-<hr />
-<div class="row">
+<div class="resolve_center">
+    <h4 style="color:indigo;">Preview transaction and then resolve it</h4>
+<br />
+</div>
+<div class="row resolve_center">   
     <div class="col-md-4">
-        <form asp-action="Resolve">
+        <form asp-action="ResolveCandidateTransaction">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                @*<h5 style="color:indigo;">User</h5>*@
@@ -64,12 +66,43 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Resolve" class="btn btn-primary" />
+                <small class="space">&nbsp;</small>
+                <a onclick="history.back()" class="btn btn-warning">Back to List</a>
             </div>
+
         </form>
     </div>
+    <br/>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .resolve_center{
+        display:flex;
+        justify-content:center;
+    }
+
+    .space
+   {
+     width:100px;
+   }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@if (TempData["InvalidTransactionResolutionEntryErrorMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["InvalidTransactionResolutionEntryErrorMessage"]");  
+            };  
+        </script> 
+	}
+
+
+
+
+
 

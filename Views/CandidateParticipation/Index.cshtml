@@ -6,12 +6,17 @@
 }
 
 
+@*    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<div align="right">
+    <h4 class="button4 glyphicon glyphicon-user">@ViewBag.UserMailID</h4>
+</div>*@
+
 @if(Model.RoleID!=1)
 {
     <div class="Button_center">
     <div class="col-md-4 ">
         <br />
-        <a asp-action="Create" class="btn btn-success"  asp-controller="CandidateParticipation" asp-route-id="@Model.UserId">Create Payment Request</a> 
+        <a asp-action="GetTransactionRequest" class="btn btn-success"  asp-controller="CandidateParticipation" asp-route-EncrUserID="@Model.UserId">Create Payment Request</a> 
         <br /><br />
     </div>
 </div>  
@@ -57,6 +62,9 @@ else
     <thead>
         <tr>
             <th>
+               User ID
+            </th>
+            <th>
                Reciepant Bank
             </th>
             <th>
@@ -87,8 +95,11 @@ else
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.candidateTransactions) {
+@foreach (var item in Model.candidateTransactions.OrderBy(S=>S.ApprovalStatus)) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReciepientBank)
             </td>
@@ -102,7 +113,8 @@ else
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TransactionDate)
+               @* @Html.DisplayFor(modelItem => item.TransactionDate)*@
+               <p>@item.TransactionDate.ToString("D")</p>
             </td>
             @*<td>                   
                 @Html.DisplayFor(modelItem => item.TransactionRecieptPath)
@@ -132,7 +144,7 @@ else
                     @if (Model.RoleID == 1 && item.ApprovalStatus==0)
                     {
                         <td>
-                            <a asp-action="Resolve" class="btn btn-warning"  asp-controller="CandidateParticipation" asp-route-Urn="@item.Urn">Resolve</a> 
+                            <a asp-action="ResolveCandidateTransaction" class="btn btn-warning"  asp-controller="CandidateParticipation" asp-route-Urn="@item.Urn">Resolve</a> 
                        </td> 
                     }
         </tr>
@@ -181,6 +193,17 @@ else
   font-size: 16px;
 }
 
+.button4 {
+  background-color: #964B00; /* dark, dusky purplish pink */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 
 .styled-table {
     border-collapse: collapse;
@@ -192,3 +215,22 @@ else
 }
 </style>
 
+@if (TempData["TransactionRequestSubmissionResponseMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["TransactionRequestSubmissionResponseMessage"]");  
+            };  
+        </script> 
+	}
+
+@if (TempData["TransactionResolutionResponseMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["TransactionResolutionResponseMessage"]");  
+            };  
+        </script> 
+	}

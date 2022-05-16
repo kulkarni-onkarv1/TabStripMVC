@@ -1,10 +1,9 @@
 ﻿@model Member
-<div class="row">
+<div class="center">
     <div class="col-md-4">
         <form asp-action="ValidateMail">
-             <h6 style="color:red;">@ViewBag.Message</h6>
             @*<h4>@ViewData["Message"]</h4>*@
-            <h5 style="color:indigo;">Enter 6 Digit OTP Sent On Your Mail ID</h5>
+            <h5 style="color:indigo;">Enter One Time Password   Sent On Your Mail ID</h5>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="OTP" class="control-label"></label>
@@ -18,6 +17,23 @@
     </div>
 </div>
 
+@*<style>
+    .center{
+        display:flex;
+        justify-content:center;
+    }
+</style>*@
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+@if (TempData["InvalidOTPErrorMessage"]!= null)  
+    {  
+        <script type="text/javascript">  
+            window.onload = function () 
+			{  
+                alert("@TempData["InvalidOTPErrorMessage"]");  
+            };  
+        </script> 
+	}

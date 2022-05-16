@@ -16,8 +16,9 @@ namespace TabStripDemo.Controllers
         List<CandidateTransaction> getcandidateTransactions;
         List<Status> status;
         List<String> TransactionTypes;
+        private readonly IRepository<User, string> userAccess;
 
-        public CandidateParticipationController()
+        public CandidateParticipationController(IRepository<User, string> userAccess)
         {
             candidateParticipation= new CandidateParticipation();
             userAuthenticationAccess= new UserAuthenticationAccess();
@@ -29,6 +30,7 @@ namespace TabStripDemo.Controllers
             {
                 "IMPS","NEFT","UPI","Third Party Within Bank/FT"
             };
+            this.userAccess = userAccess;
         }
         public IActionResult Index(string EncrUserId)
         {
@@ -38,6 +40,7 @@ namespace TabStripDemo.Controllers
                 return LocalRedirect("/");
             }
             var RoleID = userAuthenticationAccess.GetRoleByUserId(int.Parse(DecrUserId));
+            
             if(RoleID != null)
 			{
                 getcandidateTransactions = candidateParticipation.GetTransactions();
@@ -45,33 +48,50 @@ namespace TabStripDemo.Controllers
 			else
 			{
                 getcandidateTransactions = candidateParticipation.GetByUserId(int.Parse(DecrUserId));
+                /*foreach(var transaction in getcandidateTransactions)
+                {
+                    transaction.TransactionDate=Convert.ToDateTime(transaction.TransactionDate);
+                }*/
             }            
             var candidateDetails = new CandidateDetails()
             {
-                candidateTransactions = getcandidateTransactions,
+                candidateTransactions = getcandidateTransactions,                
                 UserId = EncrUserId,
                 RoleID = RoleID
-
             };
             
             return View(candidateDetails);
         }
 
-        public IActionResult Create(string id)
+        public IActionResult GetTransactionRequest(string EncrUserID)
         {
             CandidateTransaction transaction = new CandidateTransaction();
-            transaction.UserId=int.Parse(EncryptorDecryptor.DecryptAsync(id));
+            transaction.UserId=int.Parse(EncryptorDecryptor.DecryptAsync(EncrUserID));
             ViewBag.TransactionTypes = new SelectList(TransactionTypes, "TransactionTypes");
             return View(transaction);
         }
         [HttpPost]
-        public IActionResult Create(CandidateTransaction transaction)
+        public IActionResult GetTransactionRequest(CandidateTransaction transaction)
         {
-            var generatePaymentClaim = candidateParticipation.CreatePaymentRequest(transaction);
+            if (!ModelState.IsValid)
+            {
+                TempData["InvalidTransactionEntryErrorMessage"] = "Oh!Oh!Invalid Entries.Please Check All Inputs";
+                var EncrUserID = EncryptorDecryptor.EncryptAsync(transaction.UserId.ToString());
+                return RedirectToAction("GetTransactionRequest", new { EncrUserID = EncrUserID });
+            }
+            var generatePaymentClaim = candidateParticipation.CreatePaymentRequest(transaction).Result;
+            if (generatePaymentClaim == null)
+            {
+                TempData["TransactionRequestSubmissionResponseMessage"] = "Unable to process your request at this time.Please try again letter";
+            }
+            else
+            {
+                TempData["TransactionRequestSubmissionResponseMessage"] = "Request has been submitted successfully!You will be notified at status change";
+            }
             return RedirectToAction("Index",new { EncrUserId = EncryptorDecryptor.EncryptAsync(transaction.UserId.ToString()) });
         }
 
-        public IActionResult Resolve(int Urn)
+        public IActionResult ResolveCandidateTransaction(int Urn)
         {
             var getCandidateTransaction= candidateParticipation.GetTransactions().Where(U=>U.Urn==Urn).FirstOrDefault();
             ViewBag.ResolveStatus= new SelectList(status, "Code", "StatusText");
@@ -79,11 +99,35 @@ namespace TabStripDemo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Resolve(CandidateTransaction transaction)
+        public IActionResult ResolveCandidateTransaction(CandidateTransaction transaction)
         {
-            var resolvingTransaction=candidateParticipation.ResolveTransaction(transaction);
+            if (!ModelState.IsValid)
+            {
+                TempData["InvalidTransactionResolutionEntryErrorMessage"] = "Oh!Oh!Invalid Entries.Please Check All Inputs";
+                return RedirectToAction("ResolveCandidateTransaction", new { Urn = transaction.Urn });
+            }
+            candidateParticipation.StatusEvent += MailService.OnTransactionStatusChange;
+            var CandidateMailID = userAccess.GetByUserIdAsync(transaction.UserId).Result.MailId;
+            var resolvingTransaction=candidateParticipation.ResolveTransaction(transaction, CandidateMailID).Result;
+            if (resolvingTransaction == null)
+            {
+                TempData["TransactionResolutionResponseMessage"] = "Unable to process your request at this time.Please try again letter";
+            }
+            else
+            {
+                TempData["TransactionResolutionResponseMessage"] = "Transaction has been resolved!";
+            }
             var EncrUserId = EncryptorDecryptor.EncryptAsync(AuthenticationController.AdminUserID.ToString());
             return RedirectToAction("Index", new { EncrUserId = EncrUserId });
+        }
+        [HttpPost]
+        public JsonResult IsValidAmount(double Amount)
+        {
+            if (Amount <= 0)
+            {
+                return Json(data: "Transaction amount cannot be zero or negative");
+            }
+            return Json(data: true);
         }
     }
 }

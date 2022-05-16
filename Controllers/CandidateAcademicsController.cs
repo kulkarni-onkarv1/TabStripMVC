@@ -40,8 +40,13 @@ namespace TabStripDemo.Controllers
         }
 
         [HttpPost]
-        public IActionResult NavigateToAcademics(RegisterUser registerUser)
+        public IActionResult GetCandidateAcademics(RegisterUser registerUser)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["InvalidCredentialsEntryErrorMessage"] = "Oh!Oh!Invalid Entries.Please Check All Inputs";               
+                return RedirectToAction("Index", "Authentication");
+            }
             HttpContext.Session.SetSessionData<RegisterUser>("UserCredentials", registerUser);
             ViewBag.Degree = new SelectList(DegreeList, "Degree");
             ViewBag.Field = new SelectList(FieldList,"Field");
@@ -50,21 +55,20 @@ namespace TabStripDemo.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(CandidateAcademic candidateAcademic)
+        public IActionResult RegisterCandidate(CandidateAcademic candidateAcademic)
         {
-            if(HttpContext.Session.GetSessionData<RegisterUser>("UserCredentials") == null)
+            if (!ModelState.IsValid)
+            {
+                TempData["InvalidAcademicsEntryErrorMessage"] = "Oh!Oh!Invalid Entries.Please Check All Inputs";
+                var registerUser = HttpContext.Session.GetSessionData<RegisterUser>("UserCredentials");
+                return RedirectToAction("GetCandidateAcademics", new { registerUser = registerUser });
+            }
+            if (HttpContext.Session.GetSessionData<RegisterUser>("UserCredentials") == null)
             {
                 return RedirectToAction("Index","Authentication");
             }
-            if (ModelState.IsValid)
-            {
-                HttpContext.Session.SetSessionData<CandidateAcademic>("CandidateAcademics", candidateAcademic);               
-                return RedirectToAction("ValidateMail");
-            }
-            else
-            {
-                return RedirectToAction("Create");
-            }
+            HttpContext.Session.SetSessionData<CandidateAcademic>("CandidateAcademics", candidateAcademic);
+            return RedirectToAction("ValidateMail");
         }
         public IActionResult ValidateMail()
         {
@@ -74,13 +78,18 @@ namespace TabStripDemo.Controllers
                 return RedirectToAction("Index", "Authentication");
             }
             var OTP = MailService.ValidateMailID(getUserCredentials);
+            if (OTP == null)
+            {
+                TempData["RegisterResponseMessage"] = "Unable to register you at this moment!Please try again later!";
+                return RedirectToAction("Index", "Authentication");
+            }
             HttpContext.Session.SetString("OTP", OTP);
             return View(members);
         }       
         [HttpPost]
         public IActionResult ValidateMail(Member member)
         {
-            if (member.OTP == HttpContext.Session.GetString("OTP"))
+            if (member.OTP.ToString() == HttpContext.Session.GetString("OTP"))
             {
                 var getUserCredentials = HttpContext.Session.GetSessionData<RegisterUser>("UserCredentials");
                 var getCandidateAcademics= HttpContext.Session.GetSessionData<CandidateAcademic>("CandidateAcademics");
@@ -92,16 +101,45 @@ namespace TabStripDemo.Controllers
                     LockOutStatus = 0
                 };
                 var createUser = userAccess.CreateAsync(user).Result;
-                getCandidateAcademics.UserId= createUser.UserId;
-                var insertCandidateAcademics = candidateAcademicsAccess.CreateAsync(getCandidateAcademics);
-                var responseMessage = EncryptorDecryptor.EncryptAsync("You have You have been registered successfully!");
-                return RedirectToAction("Index","Authentication",new { ResponseMessage = responseMessage });
+                if(createUser == null)
+                {
+                    TempData["RegisterResponseMessage"] = "Unable to register you at this moment!Please try again later!";
+                }
+                else
+                {
+                    getCandidateAcademics.UserId = createUser.UserId;
+                    var insertCandidateAcademics = candidateAcademicsAccess.CreateAsync(getCandidateAcademics).Result;
+                    if (insertCandidateAcademics != null)
+                    {
+                        TempData["RegisterResponseMessage"] = "You have been registered successfully!";
+                    }
+                    else
+                    {
+                        TempData["RegisterResponseMessage"] = "Unable to register you at this moment!Please try again later!";
+                    }
+                }               
+               
+                return RedirectToAction("Index","Authentication");
             }
             else
             {
-                ViewBag.Message = "Oh!Oh! Invalid OTP.Please Enter Valid OTP!";
+                TempData["InvalidOTPErrorMessage"] = "Oh!Oh! Invalid OTP.Please Enter Valid OTP!";
                 return View(member);
             }
+        }
+
+        public JsonResult IsSixDigitNumber(int OTP)
+        {
+            if (OTP.ToString() == HttpContext.Session.GetString("OTP"))
+            {
+                return Json(data:true);
+            }
+            return Json(data:"Please enter valid 6 digit OTP");
+        }
+        [HttpGet]
+        public IActionResult CandidateProfile(string EncrUderID)
+        {
+            return View();
         }
     }
 }
